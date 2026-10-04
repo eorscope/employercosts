@@ -82,33 +82,10 @@ type Assumption struct {
 	Notes string
 }
 
-// Plan is one row of providers.csv: one plan of one provider.
-type Plan struct {
-	ProviderID          string
-	Provider            string
-	PlanID              string // unique within the provider
-	Plan                string
-	Scope               string   // eor | contractor | payroll | peo
-	PricingModel        string   // list | from | quote
-	PriceUSDMonth       *float64 // published price per person per month, USD
-	AnnualPriceUSDMonth *float64 // price per person per month on annual billing, USD
-	Billing             string   // monthly | annual | either | unknown
-	MinTermMonths       *int
-	DepositPolicy       string
-	FXMarkupPct         *float64
-	Addons              []string // split on " | "
-	CountriesExcluded   []string // ISO codes the provider does not cover
-	Notes               string
-	SourceName          string
-	SourceURL           string
-	CheckedAt           time.Time
-}
-
 type dataset struct {
 	countries     []CountrySummary
 	contributions map[string][]Contribution
 	assumptions   map[string][]Assumption
-	plans         []Plan
 }
 
 var (
@@ -179,23 +156,6 @@ func Contributions(iso string) []Contribution {
 // Assumptions returns the declared assumptions of a country, in dataset order.
 func Assumptions(iso string) []Assumption {
 	return append([]Assumption(nil), data().assumptions[strings.ToUpper(iso)]...)
-}
-
-// Providers returns every provider plan, in dataset order.
-func Providers() []Plan {
-	return append([]Plan(nil), data().plans...)
-}
-
-// Provider returns the plans of the provider with the given ID
-// (case-insensitive), in dataset order.
-func Provider(id string) ([]Plan, bool) {
-	var out []Plan
-	for _, p := range data().plans {
-		if strings.EqualFold(p.ProviderID, id) {
-			out = append(out, p)
-		}
-	}
-	return out, len(out) > 0
 }
 
 // --- parsing ---
@@ -396,30 +356,5 @@ func load() (*dataset, error) {
 		return nil, err
 	}
 
-	err = readCSV("providers.csv", func(r *row) {
-		d.plans = append(d.plans, Plan{
-			ProviderID:          r.str("provider_id"),
-			Provider:            r.str("provider"),
-			PlanID:              r.str("plan_id"),
-			Plan:                r.str("plan"),
-			Scope:               r.str("scope"),
-			PricingModel:        r.str("pricing_model"),
-			PriceUSDMonth:       r.optFloat("price_usd_month"),
-			AnnualPriceUSDMonth: r.optFloat("annual_price_usd_month"),
-			Billing:             r.str("billing"),
-			MinTermMonths:       r.optInt("min_term_months"),
-			DepositPolicy:       r.str("deposit_policy"),
-			FXMarkupPct:         r.optFloat("fx_markup_pct"),
-			Addons:              r.list("addons", " | "),
-			CountriesExcluded:   r.list("countries_excluded", ";"),
-			Notes:               r.str("notes"),
-			SourceName:          r.str("source_name"),
-			SourceURL:           r.str("source_url"),
-			CheckedAt:           r.date("checked_at"),
-		})
-	})
-	if err != nil {
-		return nil, err
-	}
 	return d, nil
 }

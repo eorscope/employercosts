@@ -1,7 +1,6 @@
 // Package employercosts embeds the EOR Scope dataset of statutory employer
-// costs (76 countries) and published Employer of Record provider plans, and
-// exposes it as typed, read-only records. It has no dependencies and makes no
-// network calls.
+// costs (76 countries) and exposes it as typed, read-only records. It has no
+// dependencies and makes no network calls.
 //
 // The package is a lookup library: it returns the figures as exported and
 // computes nothing. Employer cost totals are the ones published in the
@@ -12,7 +11,6 @@
 //   - Contributions returns the employer contributions and statutory extras
 //     of a country.
 //   - Assumptions returns the case each country's lines and total hold for.
-//   - Providers and Provider return provider plans.
 //
 // A country flagged TotalDeclaredFloor publishes an "at least" figure, not a
 // total. Under TotalDeclaredCeiling the modelled contribution base is the
