@@ -114,11 +114,13 @@ func TestContributions(t *testing.T) {
 			}
 		}
 	}
-	if total != 542 {
-		t.Errorf("contribution lines: got %d, want 542", total)
+	// 543 since the 2026-10-11 export: Canada gained the employer CPP2 line
+	if total != 543 {
+		t.Errorf("contribution lines: got %d, want 543", total)
 	}
-	// Mexico: 9 lines on the integrated base (SBC), 1 on the state payroll-tax base
-	if len(factored) != 2 || factored[1.049315] != 9 || factored[1.049867] != 1 {
+	// Mexico: 9 lines on the integrated base (SBC), 1 on the state payroll-tax base; since the 2026-10-11 export the
+	// statutory holiday payments sit in the contribution base: Netherlands 1.08 (4 lines), Sweden 1.009 (7 lines)
+	if len(factored) != 4 || factored[1.049315] != 9 || factored[1.049867] != 1 || factored[1.08] != 4 || factored[1.009] != 7 {
 		t.Errorf("lines with a base_factor other than 1: %v", factored)
 	}
 	if Contributions("xx") != nil {

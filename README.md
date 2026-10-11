@@ -5,7 +5,7 @@ employer costs, as typed, read-only records.
 
 - 76 countries: employer cost in % and USD per month at an example salary,
   local currency, exchange rate and review date
-- 542 employer contribution and statutory extra lines, each with rate, base,
+- 543 employer contribution and statutory extra lines, each with rate, base,
   floor/ceiling, source URL and date
 - 108 declared assumptions (the case each country's total holds for)
 
