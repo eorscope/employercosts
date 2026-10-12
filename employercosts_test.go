@@ -114,9 +114,9 @@ func TestContributions(t *testing.T) {
 			}
 		}
 	}
-	// 543 since the 2026-10-11 export: Canada gained the employer CPP2 line
-	if total != 543 {
-		t.Errorf("contribution lines: got %d, want 543", total)
+	// 544 since the 2026-10-12 export: South Korea gained a minimum_wage line, outside the total (543 since 2026-10-11: Canada CPP2)
+	if total != 544 {
+		t.Errorf("contribution lines: got %d, want 544", total)
 	}
 	// Mexico: 9 lines on the integrated base (SBC), 1 on the state payroll-tax base; since the 2026-10-11 export the
 	// statutory holiday payments sit in the contribution base: Netherlands 1.08 (4 lines), Sweden 1.009 (7 lines)
